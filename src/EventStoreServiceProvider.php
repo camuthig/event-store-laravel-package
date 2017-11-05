@@ -67,11 +67,15 @@ class EventStoreServiceProvider extends ServiceProvider
 
     protected function registerStores(): void
     {
-        $this->app->singleton(Contracts\EventStoreFactory::class, EventStoreFactory::class);
+        $this->app->singleton(Contracts\EventStoreFactory::class, function (Application $app) {
+            return new EventStoreFactory($app);
+        });
 
         $this->app->singleton('event_store', function (Application $app) {
             return new EventStoreManager($app->make(EventStoreFactory::class));
         });
+
+        $this->app->alias('event_store', EventStoreManager::class);
 
         $this->app->singleton(EventStore::class, function (Application $app) {
             return $app->make('event_store')->store('default');
@@ -104,7 +108,7 @@ class EventStoreServiceProvider extends ServiceProvider
 
             // Optionally bind the repository to an interface
             if (isset($repositoryConfig['repository_interface'])) {
-                $this->app->alias($repositoryConfig['repository_interface'], $serviceId);
+                $this->app->alias($serviceId, $repositoryConfig['repository_interface']);
             }
         }
     }
