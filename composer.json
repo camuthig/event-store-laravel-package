@@ -1,0 +1,33 @@
+{
+    "name": "camuthig/event-store-laravel-package",
+    "description": "A package for using the event store in a Laravel project",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Chris Muthig",
+            "email": "camuthig@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Camuthig\\EventStore\\Package\\": "src"
+        }
+    },
+    "require": {
+        "php": "^7.1",
+        "prooph/event-store": "^7.2",
+        "prooph/pdo-event-store": "^1.0"
+    },
+    "require-dev": {
+        "laravel/framework": "5.5.*",
+        "prooph/event-sourcing": "^5.2"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Camuthig\\EventStore\\Package\\EventStoreServiceProvider"
+            ]
+        }
+    }
+}
