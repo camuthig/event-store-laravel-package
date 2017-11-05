@@ -8,9 +8,8 @@ a Laravel project.
 [x] Support PDO event stores out of the box
 [x] Provide commands for working with projections
 [x] Bind repositories to class name and optional interface
-[x] Support custom progection manager and event store resolvers
-[ ] Support standard Event Store bus bridge plugins out of the box
-[ ] Support snapshot stores
+[x] Support custom projection manager and event store resolvers
+[x] Support snapshot stores
 
 ## Installation
 
