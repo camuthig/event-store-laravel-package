@@ -5,12 +5,12 @@ a Laravel project.
 
 ## Features
 
-[x] Support PDO event stores out of the box
-[x] Provide commands for working with projections
-[x] Bind repositories to class name and optional interface
-[x] Support custom projection manager and event store resolvers
-[x] Support snapshot stores
-[ ] Add migrations for streams, projections and snapshots
+- [x] Support PDO event stores out of the box
+- [x] Provide commands for working with projections
+- [x] Bind repositories to class name and optional interface
+- [x] Support custom projection manager and event store resolvers
+- [x] Support snapshot stores
+- [ ] Add migrations for streams, projections and snapshots
 
 ## Installation
 
