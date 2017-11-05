@@ -31,7 +31,7 @@ class CreateEventStoreTables extends Migration
             $table->json('position')->nullable();
             $table->json('state')->nullable();
             $table->string('status', 28);
-            $table->string('lock_until', 26);
+            $table->string('locked_until', 26)->nullable();
 
             $table->unique('name', 'ix_name');
         });
