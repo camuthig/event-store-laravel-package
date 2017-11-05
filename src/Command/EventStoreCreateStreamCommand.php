@@ -26,5 +26,7 @@ class EventStoreCreateStreamCommand extends Command
         $name  = $this->argument('name');
 
         $store->create(new Stream(new StreamName($name), new ArrayIterator()));
+
+        $this->info(sprintf('Created stream %s', $name));
     }
 }
