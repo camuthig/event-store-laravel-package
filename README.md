@@ -10,7 +10,7 @@ a Laravel project.
 - [x] Bind repositories to class name and optional interface
 - [x] Support custom projection manager and event store resolvers
 - [x] Support snapshot stores
-- [ ] Add migrations for streams, projections and snapshots
+- [x] Add migrations for streams, projections and snapshots
 
 ## Installation
 

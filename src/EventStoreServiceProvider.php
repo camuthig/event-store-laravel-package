@@ -42,6 +42,11 @@ class EventStoreServiceProvider extends ServiceProvider
             'config'
         );
 
+        $this->publishes(
+            [$this->getMigrationsPath() => database_path('migrations')],
+            'migrations'
+        );
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Command\ProjectionRunCommand::class,
@@ -51,6 +56,7 @@ class EventStoreServiceProvider extends ServiceProvider
                 Command\ProjectionStopCommand::class,
                 Command\ProjectionStreamsPositionCommand::class,
                 Command\ProjectionsNamesCommand::class,
+                Command\EventStoreCreateStreamCommand::class
             ]);
         }
     }
@@ -63,6 +69,11 @@ class EventStoreServiceProvider extends ServiceProvider
     protected function getConfigPath(): string
     {
         return __DIR__ . '/../config/event_store.php';
+    }
+
+    protected function getMigrationsPath(): string
+    {
+        return __DIR__ . '/../migrations/';
     }
 
     protected function registerStores(): void

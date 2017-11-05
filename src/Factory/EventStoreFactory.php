@@ -65,6 +65,13 @@ class EventStoreFactory implements EventStoreFactoryContract
         return $actionEventEmittingEventStore;
     }
 
+    public function forRepository(string $name): EventStore
+    {
+        $store = config(sprintf('event_store.repositories.%s.store', $name));
+
+        return $this->make($store);
+    }
+
     public function addResolver(string $name, Closure $resolver): void
     {
         $this->resolvers[$name] = $resolver;

@@ -11,5 +11,7 @@ interface EventStoreFactory
 {
     public function make(string $name): EventStore;
 
+    public function forRepository(string $name): EventStore;
+
     public function addResolver(string $name, Closure $resolver): void;
 }
