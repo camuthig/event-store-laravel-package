@@ -43,7 +43,7 @@ class EventStoreServiceProvider extends ServiceProvider
         );
 
         $this->publishes(
-            [$this->getMigrationsPath() => database_path('migrations')],
+            [$this->getMigrationsPath() => database_path('migrations/' . date('Y_m_d_His_') . 'CreateEventStoreTables.php')],
             'migrations'
         );
 
@@ -73,7 +73,7 @@ class EventStoreServiceProvider extends ServiceProvider
 
     protected function getMigrationsPath(): string
     {
-        return __DIR__ . '/../migrations/';
+        return __DIR__ . '/../migrations/CreateEventStoreTables.php';
     }
 
     protected function registerStores(): void

@@ -21,8 +21,7 @@ class CreateEventStoreTables extends Migration
             $table->json('metadata');
             $table->string('category', 150);
 
-            $table->primary('no');
-            $table->unique('ream_stream_name', 'ix_rsn');
+            $table->unique('real_stream_name', 'ix_rsn');
             $table->index('category', 'ix_cat');
         });
 
@@ -34,7 +33,6 @@ class CreateEventStoreTables extends Migration
             $table->string('status', 28);
             $table->string('lock_until', 26);
 
-            $table->primary('no');
             $table->unique('name', 'ix_name');
         });
 
