@@ -91,7 +91,6 @@ return [
     |
     */
     'projection_managers' => [
-        'default' => 'mysql',
         'mysql' => [
             'store' => 'mysql',
             'projections' => [
