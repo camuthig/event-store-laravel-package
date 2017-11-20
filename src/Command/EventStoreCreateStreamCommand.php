@@ -22,7 +22,7 @@ class EventStoreCreateStreamCommand extends Command
     public function handle(): void
     {
         /** @var EventStore $store */
-        $store = app()->make(EventStoreManager::class)->make($this->argument('store'));
+        $store = app()->make(EventStoreManager::class)->store($this->argument('store'));
         $name  = $this->argument('name');
 
         $store->create(new Stream(new StreamName($name), new ArrayIterator()));
