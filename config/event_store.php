@@ -91,18 +91,8 @@ return [
     |
     */
     'projection_managers' => [
-        'mysql' => [
-            'store' => 'mysql',
-            'projections' => [
-            ]
-        ],
-        'maria_db' => [
-            'store' => 'maria_db',
-            'projections' => [
-            ]
-        ],
-        'postgres' => [
-            'store' => 'postgres',
+        'default' => [
+            'store' => 'default',
             'projections' => [
             ]
         ]
