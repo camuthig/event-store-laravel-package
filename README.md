@@ -3,6 +3,8 @@
 This package presents the necessary tools to leverage Prooph Event Stores inside
 a Laravel project.
 
+An example of how to use this project can be found at the [ProophessorDo Laravel example](https://github.com/camuthig/proophessor-do-laravel).
+
 ## Features
 
 - [x] Support PDO event stores out of the box
@@ -16,21 +18,65 @@ a Laravel project.
 
 `composer require camuthig/laravel-event-store-package`
 
+## Setup
+
+### Publish the Config
+
+`php artisan vendor:publish`
+
+### Include the Provider
+
+The package will automatically be discovered by Laravel when installed, no
+changes to include the service provider are needed.
+
 ## Usage
 
 ### Event Store
 
-Each store will be bound to the class it defines. Additionally, the store
-defined as the `default` will be bound to the `EventStore` interface.
+Each event store is bound in a number of ways.
 
-An `EventStoreManager` will also be bound into the application. Each event store
-can be retrieved from the manager using
-`app()->make(EventStoreManager)->store($name)`.
+* Each store is bound to the class it implements
+* The `default` store will also be bound the the `EventStore` interface
+
+Additionally, each store can be retrieved by name, as found in the configuration file,
+using the `EventStoreManager` or `EventStore` facade.
+
+
+```php
+<?php
+
+use Camuthig\EventStore\Package\EventStoreManager;
+use Prooph\EventStore\EventStore;
+use Prooph\EventStore\Pdo\MySqlEventStore;
+
+class MyController
+{
+    public function __construct(EventStore $eventStore, MySqlEventStore $mySqlEventStore, EventStoreManager $eventStoreManager) 
+    {
+        // The EventStore interface will be bound to the "default" store
+        $eventStore->fetchCategoryNames(null);
+        
+        // Each event store is also bound to the class it is an instance of
+        $mySqlEventStore->fetchCategoryNames(null);
+        
+        // The EventStoreManager is also bound into the application
+        
+        // The default event store can be retrieved from the EventStoreManager
+        $eventStoreManager->store()->fetchCategoryNames(null);
+        
+        // Or you can fetch any store by name
+        $eventStoreManager->store('postgres')->fetchCategoryNames(null);
+        
+        // Or you can work wih the manager by facade
+        \Camuthig\EventStore\Package\Facade\EventStore::store()->fetchCategoryNames(null);
+    }
+}
+```
 
 ### Repositories
 
 Each repository will be bound to the `repository_class` defined in the
-configuration file. Additionally, you can provider a `repository_interface`. If
+configuration file. Additionally, you can provide a `repository_interface`. If
 provided, the instance will also be bound to the interface, which can be used
 for dependency injection.
 
@@ -59,18 +105,6 @@ While the projection is running, you can delete/reset/stop it:
 `php artisan event-store:projection:delete -w users`
 
 `php artisan event-store:projection:stop users`
-
-
-## Setup
-
-### Publish the Config
-
-`php artisan vendor:publish`
-
-### Include the Provider
-
-The package will automatically be discovered by Laravel when installed, no
-changes to include the service provider are needed.
 
 ## Configuration
 
@@ -140,7 +174,8 @@ This can be used to support dependency injection in your classes.
 array mapping.
 * **aggregate_translator** The translator for the aggregate. Defaults
 to \Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator.
-* **stream_name** The stream name. **one_stream_per_aggregate** Set this to 
+* **stream_name** The stream name. 
+* **one_stream_per_aggregate** Set this to 
 true for an aggregate stream strategy. Default is false.
 
 ### Projection Managers
