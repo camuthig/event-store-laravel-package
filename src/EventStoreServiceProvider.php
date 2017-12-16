@@ -9,6 +9,7 @@ use Camuthig\EventStore\Package\Factory\ProjectionManagerFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Prooph\EventSourcing\Aggregate\AggregateRepository;
+use Prooph\EventSourcing\Aggregate\AggregateTranslator;
 use Prooph\EventSourcing\Aggregate\AggregateType;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Exception\ConfigurationException;
@@ -129,6 +130,17 @@ class EventStoreServiceProvider extends ServiceProvider
         $this->app->singleton(Contracts\ProjectionManagerFactory::class, function (Application $app) {
             return new ProjectionManagerFactory($app);
         });
+
+        $configs = config('event_store.projection_managers');
+
+        foreach ($configs as $name => $config) {
+            $this->app->singleton('event_store.projection_managers.' . $name, function (Application $app) use ($name) {
+                $factory = $app->make(Contracts\ProjectionManagerFactory::class);
+
+                return $factory->make($name);
+            });
+        }
+
     }
 
     /**
@@ -138,12 +150,12 @@ class EventStoreServiceProvider extends ServiceProvider
     {
         $configs = config('event_store.projection_managers');
 
-        foreach ($configs as $config) {
+        foreach ($configs as $name => $config) {
             $projectionConfigs = $config['projections'];
 
-            foreach ($projectionConfigs as $name => $projectionConfig) {
-                $this->app->alias($projectionConfig['read_model'], 'event_store.projection.' . $name . '.read_model');
-                $this->app->alias($projectionConfig['projection'], 'event_store.projection.' . $name . '.projection');
+            foreach ($projectionConfigs as $projectionName => $projectionConfig) {
+                $this->app->alias($projectionConfig['read_model'], 'event_store.projection.' . $projectionName . '.read_model');
+                $this->app->alias($projectionConfig['projection'], 'event_store.projection.' . $projectionName . '.projection');
             }
         }
 
@@ -169,7 +181,13 @@ class EventStoreServiceProvider extends ServiceProvider
             $aggregateType = AggregateType::fromAggregateRootClass($config['aggregate_type']);
         }
 
-        $aggregateTranslator = $app->make($config['aggregate_translator']);
+        if (isset($config['aggregate_translator'])) {
+            $aggregateTranslator = $app->make($config['aggregate_translator']);
+        } elseif ($app->has(AggregateTranslator::class)) {
+            $aggregateTranslator = $app->get(AggregateTranslator::class);
+        } else {
+            $aggregateTranslator = new \Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator();
+        }
 
         $snapshotStore = isset($config['snapshot_store']) ? $app->make($config['snapshot_store']) : null;
 
