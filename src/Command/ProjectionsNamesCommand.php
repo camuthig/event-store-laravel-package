@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 class ProjectionsNamesCommand extends Command
 {
     protected $signature = 'event-store:projections:names
-    {?filter : Filter by this string}
+    {filter? : Filter by this string}
     {--r|regex : Enable regex syntax filtering}
     {--l|limit=20 : Limit the result set}
     {--o|offset=0 : Offset the result set}
