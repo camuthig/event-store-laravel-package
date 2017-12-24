@@ -102,7 +102,7 @@ class EventStoreFactory implements EventStoreFactoryContract
         }
 
         $connection = app()->get('db')->connection($connectionName)->getPdo();
-        $messageFactory = array_key_exists('message_factory', $config) ? app()->get($config['message_factory']) : new FQCNMessageFactory();
+        $messageFactory = array_key_exists('message_factory', $config) ? app()->make($config['message_factory']) : new FQCNMessageFactory();
         $persistenceStrategy = new $config['persistence_strategy']();
 
         return new $storeClass(
