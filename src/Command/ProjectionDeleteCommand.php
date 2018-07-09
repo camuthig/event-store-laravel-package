@@ -25,6 +25,7 @@ class ProjectionDeleteCommand extends AbstractProjectionCommand
             $this->warn(sprintf('Deleting %s projection', $this->projectionName));
         }
         $this->projectionManager->deleteProjection($this->projectionName, $withEvents);
+        $this->readModel->delete();
 
         $this->info(sprintf('Deleted %s projection', $this->projectionName));
     }
