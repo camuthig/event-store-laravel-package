@@ -16,6 +16,7 @@ class ProjectionResetCommand extends AbstractProjectionCommand
         $this->warn(sprintf('Resetting %s projection', $this->projectionName));
 
         $this->projectionManager->resetProjection($this->projectionName);
+        $this->readModel->reset();
 
         $this->info(sprintf('Reset %s projection', $this->projectionName));
     }
