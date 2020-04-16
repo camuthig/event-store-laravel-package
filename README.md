@@ -160,6 +160,50 @@ default is false.
 * **plugins** A list of plugins
 * to add to the store.
 
+#### Configuring multiple stores for the same database engine
+
+You may, for example want to use different stores for different purposes. An example of this is using a store with a
+different `persistence_strategy` for running migrations, which is much more efficient 
+([see this issue](https://github.com/prooph/pdo-event-store/issues/224)).
+
+You must name the store starting with the name of the engine (for example, `mysql`, followed by a suffix (for example
+`_projections`. The package will check what the store name starts with to determine the engine to use.
+
+Example Config:
+```php
+return [
+    'stores' => [
+        'default' => 'mysql',
+        'mysql' => [
+            'persistence_strategy' => \Prooph\EventStore\Pdo\PersistenceStrategy\MySqlSingleStreamStrategy::class,
+        ],
+        'mysql_projection' => [
+            'persistence_strategy' => \Prooph\EventStore\Pdo\PersistenceStrategy\MySqlSimpleStreamStrategy::class,
+        ],
+    ],
+
+    'repositories' => [
+        'user_collection' => [
+            'store'                => 'mysql', // Use store with `MySqlSingleStreamStrategy` for fast aggregate lookups
+            'repository_interface' => UserCollection::class,
+            'repository_class'     => EventStoreUserCollection::class,
+            'aggregate_type'       => User::class,
+        ],
+    ],
+    'projection_managers' => [
+        'default_projection_manager' => [
+            'store' => 'mysql_projection', // Use different store with `MySqlSimpleStreamStrategy`
+            'projections' => [
+                'user_projection' => [
+                    'read_model' => UserReadModel::class,
+                    'projection' => UserProjection::class,
+                ],
+            ],
+        ],
+    ],
+];
+```
+
 ### Repositories
 
 A list of all defined repositories. Each repository should be indexed using

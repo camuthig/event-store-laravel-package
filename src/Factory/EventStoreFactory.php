@@ -7,6 +7,7 @@ namespace Camuthig\EventStore\Package\Factory;
 use Camuthig\EventStore\Package\Factory\Contracts\EventStoreFactory as EventStoreFactoryContract;
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Str;
 use Prooph\Common\Event\ActionEventEmitter;
 use Prooph\Common\Event\ProophActionEventEmitter;
 use Prooph\Common\Messaging\FQCNMessageFactory;
@@ -85,15 +86,15 @@ class EventStoreFactory implements EventStoreFactoryContract
     protected function storeFromArray($name, $config): EventStore
     {
         switch ($name) {
-            case 'mysql':
+            case Str::startsWith($name, 'mysql'):
                 $storeClass     = MySqlEventStore::class;
                 $connectionName = 'mysql';
                 break;
-            case 'maria_db':
+            case Str::startsWith($name, 'maria_db'):
                 $storeClass     = MariaDbEventStore::class;
                 $connectionName = 'mysql';
                 break;
-            case 'postgres':
+            case Str::startsWith($name, 'postgres'):
                 $storeClass     = PostgresEventStore::class;
                 $connectionName = 'pgsql';
                 break;
