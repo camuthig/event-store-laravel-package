@@ -68,7 +68,7 @@ class ProjectionManagerFactory implements ProjectionManagerFactoryContract
     public function managerFor(string $projection): ProjectionManager
     {
         foreach ($this->app->make('config')->get('event_store.projection_managers') as $name => $config) {
-            if (in_array($projection, array_keys($config['projections']))) {
+            if (array_key_exists($projection, $config['projections'])) {
                 return $this->make($name);
             }
         }
@@ -78,12 +78,12 @@ class ProjectionManagerFactory implements ProjectionManagerFactoryContract
 
     public function optionsFor(string $projection) {
         foreach ($this->app->make('config')->get('event_store.projection_managers') as $name => $config) {
-            if (in_array($projection, array_keys($config['projections']))) {
+            if (array_key_exists($projection, $config['projections'])) {
                 return $config['options'] ?? [];
             }
         }
 
-        throw new RuntimeException('No options for projection ' . $projection);
+        return [];
     }
 
     public function buildPdoManager(string $name, array $config): ProjectionManager

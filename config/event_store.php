@@ -1,5 +1,7 @@
 <?php
 
+use Prooph\EventStore\Projection\Projector;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -83,6 +85,7 @@ return [
     | The necessary definitions for creating projections
     | - store: The name of the store. One of mysql, maria_db or postgres
     | - event_streams_table: Defaults to event_streams
+    | - options: Set the projection options. See the `Prooph\EventStore\Projection\Projector` constants for options
     | - projections_table: Defaults to projections
     | - projections
     |   - connection: The name of the connection to use. Defaults to the same connection as the store.
@@ -93,6 +96,10 @@ return [
     'projection_managers' => [
         'default' => [
             'store' => 'default',
+            'options' => [
+                Projector::OPTION_LOCK_TIMEOUT_MS => Projector::DEFAULT_LOCK_TIMEOUT_MS,
+                Projector::OPTION_UPDATE_LOCK_THRESHOLD => Projector::DEFAULT_UPDATE_LOCK_THRESHOLD,
+            ],
             'projections' => [
             ]
         ]
