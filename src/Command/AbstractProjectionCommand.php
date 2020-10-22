@@ -56,12 +56,14 @@ class AbstractProjectionCommand extends Command
         $this->projectionManager = app()->make(ProjectionManagerFactory::class)->managerFor($this->projectionName);
         $this->projection        = app()->make('event_store.projection.' . $this->projectionName . '.projection');
 
+        $projectionOptions = app()->make(ProjectionManagerFactory::class)->optionsFor($this->projectionName);
+
         if ($this->projection instanceof ReadModelProjection) {
             $this->readModel = app()->make('event_store.projection.' . $this->projectionName . '.read_model');
 
-            $this->projector = $this->projectionManager->createReadModelProjection($this->projectionName, $this->readModel);
+            $this->projector = $this->projectionManager->createReadModelProjection($this->projectionName, $this->readModel, $projectionOptions);
         } else {
-            $this->projector = $this->projectionManager->createProjection($this->projectionName);
+            $this->projector = $this->projectionManager->createProjection($this->projectionName, $projectionOptions);
         }
     }
 }
