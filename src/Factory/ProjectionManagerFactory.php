@@ -76,7 +76,8 @@ class ProjectionManagerFactory implements ProjectionManagerFactoryContract
         throw new RuntimeException('No projection manager for projection ' . $projection);
     }
 
-    public function optionsFor(string $projection) {
+    public function optionsFor(string $projection): array
+    {
         foreach ($this->app->make('config')->get('event_store.projection_managers') as $name => $config) {
             if (array_key_exists($projection, $config['projections'])) {
                 return $config['options'] ?? [];
