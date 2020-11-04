@@ -68,12 +68,23 @@ class ProjectionManagerFactory implements ProjectionManagerFactoryContract
     public function managerFor(string $projection): ProjectionManager
     {
         foreach ($this->app->make('config')->get('event_store.projection_managers') as $name => $config) {
-            if (in_array($projection, array_keys($config['projections']))) {
+            if (array_key_exists($projection, $config['projections'])) {
                 return $this->make($name);
             }
         }
 
         throw new RuntimeException('No projection manager for projection ' . $projection);
+    }
+
+    public function optionsFor(string $projection): array
+    {
+        foreach ($this->app->make('config')->get('event_store.projection_managers') as $name => $config) {
+            if (array_key_exists($projection, $config['projections'])) {
+                return $config['options'] ?? [];
+            }
+        }
+
+        return [];
     }
 
     public function buildPdoManager(string $name, array $config): ProjectionManager
